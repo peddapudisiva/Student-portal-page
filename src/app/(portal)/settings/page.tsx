@@ -132,7 +132,7 @@ export default function SettingsPage() {
                                <p className="text-[11px] font-medium text-foreground/40">{item.desc}</p>
                             </div>
                          </div>
-                         <Switch defaultChecked />
+                         <Switch checked />
                       </div>
                     ))}
                  </CardContent>
