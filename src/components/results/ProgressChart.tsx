@@ -26,7 +26,7 @@ export function ProgressChart() {
                 itemStyle={{ color: '#c8900a' }}
                 formatter={(value: any, name: string, entry: any) => [
                   `${value} (SGPA: ${entry.payload.sgpa}, Rank: ${entry.payload.rank})`, 'CGPA'
-                ]}
+                ] as any }
               />
               <Line 
                 type="monotone" 
