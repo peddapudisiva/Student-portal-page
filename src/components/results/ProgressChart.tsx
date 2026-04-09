@@ -24,8 +24,8 @@ export function ProgressChart() {
               <Tooltip 
                 contentStyle={{ backgroundColor: '#12223f', border: 'none', borderRadius: '8px', color: '#fff', fontWeight: 'bold' }}
                 itemStyle={{ color: '#c8900a' }}
-                formatter={(value: number, name: string, props: any) => [
-                  `${value} (SGPA: ${props.payload.sgpa}, Rank: ${props.payload.rank})`, 'CGPA'
+                formatter={(value: any, name: string, entry: any) => [
+                  `${value} (SGPA: ${entry.payload.sgpa}, Rank: ${entry.payload.rank})`, 'CGPA'
                 ]}
               />
               <Line 

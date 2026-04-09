@@ -15,6 +15,8 @@ export interface StudentProfile {
   attendance_percent?: number;
   total_credits?: number;
   email?: string;
+  employee_id?: string;
+  department?: string;
 }
 
 interface AuthContextType {
