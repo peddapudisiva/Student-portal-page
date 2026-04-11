@@ -39,7 +39,7 @@ const NAV_ITEMS = [
   { name: 'Profile', path: '/profile', icon: User },
 ];
 
-export function Sidebar() {
+export function Sidebar({ mobile, onClose }: SidebarProps) {
   const pathname = usePathname();
   const { profile } = useAuth();
   
