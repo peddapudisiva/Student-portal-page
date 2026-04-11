@@ -32,31 +32,18 @@ export default function LoginPage() {
       return;
     }
 
+    // URGENT DEMO BYPASS: Allow any email to enter the dashboard automatically
+    if (email) {
+      setTimeout(() => {
+        router.push('/dashboard');
+      }, 500);
+      return;
+    }
+
     if (!email || !password) {
       setError('Please enter both Email and Password.');
       setIsLoading(false);
       return;
-    }
-
-    try {
-      const { data, error: authError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (authError) {
-        setError(authError.message);
-        setIsLoading(false);
-        return;
-      }
-
-      if (data.user) {
-        router.push('/dashboard');
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      setError('An unexpected error occurred. Please try again.');
-      setIsLoading(false);
     }
   };
 
