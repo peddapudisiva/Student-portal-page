@@ -24,12 +24,17 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
     console.log('[AuthDebug] Bypassing authentication for demo...');
-    
-    // Unconditional Demo Login
     await signInDemo();
-    
+    setTimeout(() => {
+      router.push('/dashboard');
+    }, 300);
+  };
+
+  const handleDemoMode = async () => {
+    setIsLoading(true);
+    console.log('[AuthDebug] Direct Demo Button Clicked');
+    await signInDemo();
     setTimeout(() => {
       router.push('/dashboard');
     }, 300);
@@ -158,6 +163,25 @@ export default function LoginPage() {
                 disabled={isLoading}
               >
                 {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Login'}
+              </Button>
+
+              <div className="relative py-2">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-gray-200" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-white px-3 text-gray-500 font-semibold tracking-wider">Or</span>
+                </div>
+              </div>
+
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleDemoMode}
+                className="w-full border-2 border-[#c8900a] text-[#c8900a] hover:bg-[#c8900a]/5 font-bold h-11 transition-all duration-200"
+                disabled={isLoading}
+              >
+                View Demo Portal
               </Button>
 
               <div className="text-center pt-2">
