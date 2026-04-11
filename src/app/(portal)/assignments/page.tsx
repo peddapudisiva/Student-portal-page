@@ -55,13 +55,13 @@ interface Assignment {
 
   const MOCK_ASSIGNMENTS = {
     pending: [
-      { id: 'm1', subject: 'Machine Learning', title: 'Neural Networks Implementation', due: 'Oct 25, 2026', urgent: true, status: 'pending' },
-      { id: 'm2', subject: 'Cyber Security', title: 'Network Vulnerability Report', due: 'Oct 28, 2026', urgent: false, status: 'pending' },
-      { id: 'm3', subject: 'Compiler Design', title: 'Lexical Analyzer Construction', due: 'Nov 02, 2026', urgent: false, status: 'pending' }
+      { id: 'm1', subject: 'Machine Learning', title: 'Neural Networks Implementation', due: 'Oct 25, 2026', urgent: true, status: 'pending' } as Assignment,
+      { id: 'm2', subject: 'Cyber Security', title: 'Network Vulnerability Report', due: 'Oct 28, 2026', urgent: false, status: 'pending' } as Assignment,
+      { id: 'm3', subject: 'Compiler Design', title: 'Lexical Analyzer Construction', due: 'Nov 02, 2026', urgent: false, status: 'pending' } as Assignment
     ],
     submitted: [
-      { id: 'm4', subject: 'Software Engineering', title: 'SRS Document - Hospital Mgmt', submitted_on: 'Oct 10, 2026', grade: 'A+', status: 'submitted' },
-      { id: 'm5', subject: 'Cloud Computing', title: 'AWS EC2 Deployment Guide', submitted_on: 'Oct 05, 2026', grade: 'A', status: 'submitted' }
+      { id: 'm4', subject: 'Software Engineering', title: 'SRS Document - Hospital Mgmt', submitted_on: 'Oct 10, 2026', grade: 'A+', status: 'submitted' } as Assignment,
+      { id: 'm5', subject: 'Cloud Computing', title: 'AWS EC2 Deployment Guide', submitted_on: 'Oct 05, 2026', grade: 'A', status: 'submitted' } as Assignment
     ]
   };
 

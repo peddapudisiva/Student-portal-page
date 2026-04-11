@@ -39,6 +39,7 @@ export default function RegisterPage() {
       return;
     }
 
+    try {
       // 1. Sign up user in Auth with Metadata
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
