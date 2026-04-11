@@ -38,7 +38,10 @@ export function TopBar({ onMenuOpen }: TopBarProps) {
           <Menu className="w-5 h-5 text-foreground" />
         </Button>
         <div className="flex items-center gap-3">
-          <h2 className="text-xl font-bold text-foreground tracking-tight">{getTitle()}</h2>
+          <h2 className="text-xl font-bold text-foreground tracking-tight">
+            {getTitle()}
+            <span className="ml-2 text-[10px] font-normal text-foreground/20">v2.1</span>
+          </h2>
         </div>
       </div>
 

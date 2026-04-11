@@ -48,9 +48,9 @@ export function Sidebar({ mobile, onClose }: SidebarProps) {
 
   return (
     <aside className={cn(
-      "fixed z-50 bg-primary/95 backdrop-blur-3xl border border-white/10 shadow-2xl text-white overflow-y-auto flex flex-col premium-sidebar transition-all duration-300",
+      "fixed z-[100] bg-primary/95 backdrop-blur-3xl border border-white/10 shadow-2xl text-white overflow-y-auto flex flex-col premium-sidebar transition-all duration-300",
       mobile 
-        ? "inset-0 w-[280px] rounded-r-[24px] rounded-l-none border-l-0" 
+        ? "inset-y-0 left-0 w-[280px] rounded-r-[24px] rounded-l-none border-l-0" 
         : "left-6 top-6 bottom-6 w-[260px] rounded-[24px]"
     )}>
       {mobile && (
