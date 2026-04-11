@@ -105,8 +105,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     checkUser();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event: any, session: any) => {
-      // Clear demo mode if a real event happens
-      if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
+      // Clear demo mode if a real SIGNED_IN event happens from a different user
+      if (event === 'SIGNED_IN') {
         if (typeof window !== 'undefined') localStorage.removeItem('ixl_demo_active');
       }
 
