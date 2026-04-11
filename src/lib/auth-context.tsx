@@ -79,8 +79,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     const checkUser = async () => {
+      const demoFlag = typeof window !== 'undefined' ? localStorage.getItem('ixl_demo_active') : null;
+      console.log('[AuthDebug] checkUser started. DemoFlag:', demoFlag);
+
       // Check for forced demo mode first (e.g. from the bypass login)
-      if (typeof window !== 'undefined' && localStorage.getItem('ixl_demo_active') === 'true') {
+      if (demoFlag === 'true') {
+        console.log('[AuthDebug] Injecting Demo Profile');
         setUser({ id: 'demo-user-123', email: 'demo@ixl.edu' } as any);
         setProfile(demoProfile);
         setIsDemoMode(true);
