@@ -8,10 +8,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { motion } from 'framer-motion';
 
+import { useAuth } from '@/lib/auth-context';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 export default function LoginPage() {
   const router = useRouter();
+  const { signInDemo } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -34,9 +36,8 @@ export default function LoginPage() {
 
     // URGENT DEMO BYPASS: Allow any email to enter the dashboard automatically
     if (email) {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('ixl_demo_active', 'true');
-      }
+      setIsLoading(true);
+      signInDemo();
       setTimeout(() => {
         router.push('/dashboard');
       }, 500);

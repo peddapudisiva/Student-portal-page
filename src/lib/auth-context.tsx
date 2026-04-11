@@ -131,6 +131,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (user) await fetchProfile(user.id);
   };
 
+  const signInDemo = async () => {
+    console.log('[AuthDebug] Manual Demo Login Triggered');
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('ixl_demo_active', 'true');
+    }
+    setUser({ id: 'demo-user-123', email: 'demo@ixl.edu' } as any);
+    setProfile(demoProfile);
+    setIsDemoMode(true);
+    setLoading(false);
+  };
+
   const signOut = async () => {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('ixl_demo_active');
@@ -144,7 +155,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, profile, loading, isDemoMode, signOut, refreshProfile }}>
+    <AuthContext.Provider value={{ user, profile, loading, isDemoMode, signOut, refreshProfile, signInDemo }}>
       {children}
     </AuthContext.Provider>
   );
