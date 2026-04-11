@@ -1,0 +1,8 @@
+{
+  "mailto_enabled": false,
+  "external_email_enabled": true,
+  "rate_limit_token_hash": 1000,
+  "rate_limit_email_sent": 1000,
+  "rate_limit_otp": 1000,
+  "rate_limit_web3": 1000
+}

@@ -39,11 +39,16 @@ export default function RegisterPage() {
       return;
     }
 
-    try {
-      // 1. Sign up user in Auth
+      // 1. Sign up user in Auth with Metadata
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            full_name: fullName,
+            roll_number: rollNumber
+          }
+        }
       });
 
       if (authError) {
@@ -53,33 +58,7 @@ export default function RegisterPage() {
       }
 
       if (authData.user) {
-        // 2. Create student profile
-        const { error: profileError } = await supabase
-          .from('students')
-          .insert([
-            {
-              id: authData.user.id,
-              full_name: fullName,
-              roll_number: rollNumber,
-              email: email,
-              course: 'Not Assigned',
-              year_sem: '1st Year · Sem 1',
-              gpa: 0.0,
-              attendance_percent: 0.0
-            }
-          ]);
-
-        if (profileError) {
-          // Check for duplicate roll number
-          if (profileError.code === '23505') {
-            setError('This Roll Number is already registered.');
-          } else {
-            setError('Account created, but profile setup failed. Please contact admin.');
-          }
-          setIsLoading(false);
-          return;
-        }
-
+        // Success! The database trigger will handle the profile creation automatically.
         setSuccess(true);
         setTimeout(() => {
           router.push('/login');

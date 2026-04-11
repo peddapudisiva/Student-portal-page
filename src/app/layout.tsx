@@ -7,12 +7,16 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   title: "IXL Integrated School - Student Portal",
   description: "Official Student Portal for IXL Integrated School. Access your academics, assignments, and AI tutor.",
   keywords: "student portal, school ERP, IXL school, academic management",
   authors: [{ name: "IXL Integrated School" }],
-  viewport: "width=device-width, initial-scale=1",
   robots: "index, follow",
   openGraph: {
     type: "website",

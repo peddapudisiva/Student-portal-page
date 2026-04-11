@@ -1,34 +1,48 @@
-# Deployment Guide - IXL Student Portal
+# IXL Student Portal - Deployment Guide (Vercel)
 
-Follow these steps to deploy your portal to the internet (Vercel) and connect it to your live Supabase database.
-
-## 1. Prepare Your Environment
-Your portal requires specific environment variables to function in production. 
-
-| Variable | Description | Where to find it? |
-|----------|-------------|-------------------|
-| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase Project URL | Supabase Dashboard -> Settings -> API |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Your Supabase Anon Key | Supabase Dashboard -> Settings -> API |
-| `NEXT_PUBLIC_GEMINI_API_KEY` | (Optional) Gemini AI Key | Google AI Studio |
-
-## 2. Deploy to Vercel (Recommended)
-1. **Push to GitHub**: Initialize a Git repository in your `student portal` folder and push it to GitHub.
-2. **Import to Vercel**: 
-   - Go to [vercel.com](https://vercel.com) and click **"Add New" -> "Project"**.
-   - Import your GitHub repository.
-3. **Configure Environment Variables**:
-   - In the Vercel project settings, go to the **"Environment Variables"** tab.
-   - Copy the values from your `.env.local` file into Vercel.
-4. **Deploy**: Click **"Deploy"**. Your site will be live in ~2 minutes!
-
-## 3. Database Reminders
-- Ensure you have applied the schema in `database_production.sql` to your Supabase SQL Editor.
-- The portal is currently configured for self-registration. Anyone with the URL can create a student account.
-
-## 4. Troubleshooting
-- **Build Errors**: If the build fails, ensure all local changes are committed.
-- **Login Stuck**: Check if your Supabase URL/Key match exactly in the Vercel settings.
-- **Rate Limits**: If registration fails, it might be due to Supabase's email rate limit. You can disable email confirmation in Supabase Auth -> Providers -> Email -> "Confirm email" (toggle off) for faster testing.
+This project is optimized for deployment on **Vercel**. Follow these steps to take your school portal live.
 
 ---
-*Created by Antigravity for IXL Integrated School.*
+
+## 🚀 1. Set Up Production Supabase
+
+1.  **Create a New Project**: Go to [Supabase](https://supabase.com) and create a new project called "IXL Production".
+2.  **Apply Schema**: 
+    - Open the **SQL Editor** in your Supabase dashboard.
+    - Copy the contents of **[database_production.sql](file:///c:/Users/user/student%20portal/database_production.sql)**.
+    - Paste and click **Run**.
+3.  **Get Keys**: 
+    - Go to **Project Settings** > **API**.
+    - Copy the `Project URL` and `anon public` Key.
+
+---
+
+## ☁️ 2. Deploy to Vercel
+
+1.  **Repo Connection**: Push your latest code to your GitHub repository.
+2.  **Import**: In the [Vercel Dashboard](https://vercel.com/new), import your repository.
+3.  **Configure Environment Variables**:
+    In the "Environment Variables" section of the Vercel setup, add:
+    - `NEXT_PUBLIC_SUPABASE_URL` = (Your Production Supabase URL)
+    - `NEXT_PUBLIC_SUPABASE_ANON_KEY` = (Your Production Anon Key)
+    - `NEXT_PUBLIC_GEMINI_API_KEY` = (Your Gemini API Key for the AI Tutor)
+4.  **Deploy**: Click **Deploy**. Vercel will build the project and give you a live URL!
+
+---
+
+## 🛠️ 3. Post-Deployment Checklist
+
+- [ ] **Login**: Test the email/password login on the live URL.
+- [ ] **Registration**: Create a test student account to verify the profile is saved in your production database.
+- [ ] **AI Tutor**: Ask the AI Tutor a question to ensure your Gemini key is working.
+- [ ] **Navigation**: Verify all 14+ screens load correctly.
+
+---
+
+## ❓ Troubleshooting
+
+- **Build Failures**: This project has been pre-verified with `npm run build`. If it fails on Vercel, check that your `node` version in Vercel settings is set to **20.x or higher**.
+- **Images Not Loading**: Ensure your `public` folder contains all required branding assets.
+- **Table Not Found**: Double-check that you ran the SQL script in Step 1.
+
+**Project Status**: READY FOR LIVE ENVIRONMENT

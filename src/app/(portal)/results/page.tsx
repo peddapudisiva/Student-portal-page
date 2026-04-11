@@ -1,22 +1,42 @@
 'use client';
 
-import { useState } from 'react';
-import { ProgressChart } from '@/components/results/ProgressChart';
+import { motion } from 'framer-motion';
+import { useAuth } from '@/lib/auth-context';
+import { supabase } from '@/lib/supabase';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { Trophy, Download, Calculator } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Download, Calculator } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { motion } from 'framer-motion';
+import { ProgressChart } from '@/components/results/ProgressChart';
 
 export default function ResultsPage() {
   const [activeSem, setActiveSem] = useState('Sem 5');
+  const [dbMarks, setDbMarks] = useState<any[]>([]);
+  const { user } = useAuth();
+  
   const semesters = ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5'];
 
-  const marks = [
-    { subject: 'Data Structures', mid1: 28, mid2: 24, best: 28, assign: 5, lab: 15, internal: 48, external: 42, total: 90, grade: 'S', status: 'Pass' },
-    { subject: 'Operating Systems', mid1: 15, mid2: 20, best: 20, assign: 4, lab: 12, internal: 36, external: 22, total: 58, grade: 'E', status: 'Pass' },
-    { subject: 'Computer Networks', mid1: 12, mid2: 10, best: 12, assign: 4, lab: 12, internal: 28, external: 10, total: 38, grade: 'F', status: 'Fail' },
-  ];
+  useEffect(() => {
+    if (!user) return;
+    
+    const fetchGrades = async () => {
+      const { data, error } = await supabase
+        .from('grades')
+        .select('*')
+        .eq('student_id', user.id)
+        .eq('semester', activeSem);
+      
+      if (!error && data) {
+        setDbMarks(data);
+      }
+    };
+    
+    fetchGrades();
+  }, [user, activeSem]);
+
+  const hasResults = dbMarks.length > 0;
 
   const containerVars = {
     hidden: { opacity: 0 },
@@ -74,52 +94,63 @@ export default function ResultsPage() {
             <CardHeader className="border-b border-border/40 py-4 bg-black/[0.02]">
               <CardTitle className="text-lg font-bold text-foreground">Marks Statement - {activeSem}</CardTitle>
             </CardHeader>
-            <CardContent className="p-0 overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow className="border-border/40 bg-white/50">
-                    <TableHead className="font-bold text-foreground whitespace-nowrap">Subject</TableHead>
-                    <TableHead className="font-bold text-foreground text-center">Mid-1</TableHead>
-                    <TableHead className="font-bold text-foreground text-center">Mid-2</TableHead>
-                    <TableHead className="font-bold text-secondary text-center">Best</TableHead>
-                    <TableHead className="font-bold text-foreground text-center">Assgn</TableHead>
-                    <TableHead className="font-bold text-foreground text-center">Int Total</TableHead>
-                    <TableHead className="font-bold text-foreground text-center">End Sem</TableHead>
-                    <TableHead className="font-bold text-foreground text-center">Total</TableHead>
-                    <TableHead className="font-bold text-foreground text-center">Grade</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {marks.map((m, i) => (
+            <CardContent className="p-0 overflow-x-auto min-h-[300px] flex flex-col items-center justify-center">
+              {hasResults ? (
+                <Table>
+                  <TableHeader>
+                    <TableRow className="border-border/40 bg-white/50">
+                      <TableHead className="font-bold text-foreground whitespace-nowrap">Subject</TableHead>
+                      <TableHead className="font-bold text-foreground text-center">Mid-1</TableHead>
+                      <TableHead className="font-bold text-foreground text-center">Mid-2</TableHead>
+                      <TableHead className="font-bold text-secondary text-center">Best</TableHead>
+                      <TableHead className="font-bold text-foreground text-center">Assgn</TableHead>
+                      <TableHead className="font-bold text-foreground text-center">Int Total</TableHead>
+                      <TableHead className="font-bold text-foreground text-center">End Sem</TableHead>
+                      <TableHead className="font-bold text-foreground text-center">Total</TableHead>
+                      <TableHead className="font-bold text-foreground text-center">Grade</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {dbMarks.map((m, i) => {
+                      const bestMid = Math.max(m.mid1 || 0, m.mid2 || 0);
+                      return (
+                        <motion.tr 
+                          key={i} 
+                          initial={{ opacity: 0, y: 15 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.15 }}
+                          className="border-border/40 hover:bg-black/5 transition-colors duration-150"
+                        >
+                          <TableCell className="font-bold text-foreground truncate max-w-[150px]">{m.subject}</TableCell>
+                          <TableCell className={`text-center font-medium ${m.mid1 === bestMid ? 'text-secondary font-bold' : 'text-foreground'}`}>{m.mid1}</TableCell>
+                          <TableCell className={`text-center font-medium ${m.mid2 === bestMid ? 'text-secondary font-bold' : 'text-foreground'}`}>{m.mid2}</TableCell>
+                          <TableCell className="text-center font-bold text-secondary shadow-sm bg-secondary/5 rounded-md">{bestMid}</TableCell>
+                          <TableCell className="text-center font-medium text-foreground">{m.assign}</TableCell>
+                          <TableCell className="text-center font-bold text-foreground">{(m.mid1 + m.mid2) / 2 + (m.assign || 0)}</TableCell>
+                          <TableCell className="text-center font-medium text-foreground">{m.external}</TableCell>
+                          <TableCell className="text-center font-extrabold text-foreground">{m.total}</TableCell>
+                          <TableCell className={`text-center font-bold ${m.status === 'Pass' ? 'text-green-600' : 'text-red-500'}`}>{m.grade}</TableCell>
+                        </motion.tr>
+                      );
+                    })}
                     <motion.tr 
-                      key={i} 
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.15 }}
-                      className="border-border/40 hover:bg-black/5 transition-colors duration-150"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.6 }}
+                      className="bg-primary text-primary-foreground hover:bg-primary/95"
                     >
-                      <TableCell className="font-bold text-foreground truncate max-w-[150px]">{m.subject}</TableCell>
-                      <TableCell className={`text-center font-medium ${m.mid1 === m.best ? 'text-secondary font-bold' : 'text-foreground'}`}>{m.mid1}</TableCell>
-                      <TableCell className={`text-center font-medium ${m.mid2 === m.best ? 'text-secondary font-bold' : 'text-foreground'}`}>{m.mid2}</TableCell>
-                      <TableCell className="text-center font-bold text-secondary shadow-sm bg-secondary/5 rounded-md">{m.best}</TableCell>
-                      <TableCell className="text-center font-medium text-foreground">{m.assign}</TableCell>
-                      <TableCell className="text-center font-bold text-foreground">{m.internal}</TableCell>
-                      <TableCell className="text-center font-medium text-foreground">{m.external}</TableCell>
-                      <TableCell className="text-center font-extrabold text-foreground">{m.total}</TableCell>
-                      <TableCell className={`text-center font-bold ${m.status === 'Pass' ? 'text-green-600' : 'text-red-500'}`}>{m.grade}</TableCell>
+                      <TableCell colSpan={6} className="font-bold text-right text-white">Summary:</TableCell>
+                      <TableCell colSpan={3} className="font-bold text-left text-secondary drop-shadow-sm">Current Semester Stats Available</TableCell>
                     </motion.tr>
-                  ))}
-                  <motion.tr 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.6 }}
-                    className="bg-primary text-primary-foreground hover:bg-primary/95"
-                  >
-                    <TableCell colSpan={6} className="font-bold text-right text-white">Summary:</TableCell>
-                    <TableCell colSpan={3} className="font-bold text-left text-secondary drop-shadow-sm">SGPA: 8.9 • CGPA: 8.8</TableCell>
-                  </motion.tr>
-                </TableBody>
-              </Table>
+                  </TableBody>
+                </Table>
+              ) : (
+                <EmptyState 
+                  icon={Trophy}
+                  title={`No Results for ${activeSem}`}
+                  description="Your academic records for this semester haven't been released yet. Check back after your examinations!"
+                />
+              )}
             </CardContent>
           </Card>
         </motion.div>

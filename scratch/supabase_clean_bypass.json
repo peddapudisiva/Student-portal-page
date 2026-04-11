@@ -1,0 +1,5 @@
+{
+  "mailto_enabled": false,
+  "external_email_enabled": true,
+  "sms_autoconfirm": true
+}
