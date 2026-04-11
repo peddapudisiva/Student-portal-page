@@ -53,8 +53,22 @@ interface Assignment {
     fetchAssignments();
   }, [user]);
 
-  // Only use mock data if specifically requested or in demo mode
-  const displayAssignments = dbAssignments;
+  const MOCK_ASSIGNMENTS = {
+    pending: [
+      { id: 'm1', subject: 'Machine Learning', title: 'Neural Networks Implementation', due: 'Oct 25, 2026', urgent: true, status: 'pending' },
+      { id: 'm2', subject: 'Cyber Security', title: 'Network Vulnerability Report', due: 'Oct 28, 2026', urgent: false, status: 'pending' },
+      { id: 'm3', subject: 'Compiler Design', title: 'Lexical Analyzer Construction', due: 'Nov 02, 2026', urgent: false, status: 'pending' }
+    ],
+    submitted: [
+      { id: 'm4', subject: 'Software Engineering', title: 'SRS Document - Hospital Mgmt', submitted_on: 'Oct 10, 2026', grade: 'A+', status: 'submitted' },
+      { id: 'm5', subject: 'Cloud Computing', title: 'AWS EC2 Deployment Guide', submitted_on: 'Oct 05, 2026', grade: 'A', status: 'submitted' }
+    ]
+  };
+
+  const displayAssignments = (dbAssignments.pending.length > 0 || dbAssignments.submitted.length > 0) 
+    ? dbAssignments 
+    : MOCK_ASSIGNMENTS;
+
   const hasPending = displayAssignments.pending.length > 0;
   const hasSubmitted = displayAssignments.submitted.length > 0;
 

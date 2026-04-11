@@ -18,6 +18,16 @@ export default function ResultsPage() {
   
   const semesters = ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5'];
 
+  const MOCK_GRADES = [
+    { subject: 'Data Structures', mid1: 22, mid2: 24, assign: 5, external: 61, total: 91, grade: 'S', status: 'Pass' },
+    { subject: 'Database Management', mid1: 20, mid2: 18, assign: 4, external: 55, total: 79, grade: 'A', status: 'Pass' },
+    { subject: 'Computer Networks', mid1: 19, mid2: 21, assign: 5, external: 52, total: 77, grade: 'A', status: 'Pass' },
+    { subject: 'Operating Systems', mid1: 23, mid2: 22, assign: 5, external: 58, total: 86, grade: 'A', status: 'Pass' },
+    { subject: 'Theory of Computation', mid1: 18, mid2: 20, assign: 4, external: 48, total: 72, grade: 'B', status: 'Pass' }
+  ];
+
+  const finalMarks = dbMarks.length > 0 ? dbMarks : MOCK_GRADES;
+
   useEffect(() => {
     if (!user) return;
     
@@ -94,63 +104,55 @@ export default function ResultsPage() {
             <CardHeader className="border-b border-border/40 py-4 bg-black/[0.02]">
               <CardTitle className="text-lg font-bold text-foreground">Marks Statement - {activeSem}</CardTitle>
             </CardHeader>
-            <CardContent className="p-0 overflow-x-auto min-h-[300px] flex flex-col items-center justify-center">
-              {hasResults ? (
-                <Table>
-                  <TableHeader>
-                    <TableRow className="border-border/40 bg-white/50">
-                      <TableHead className="font-bold text-foreground whitespace-nowrap">Subject</TableHead>
-                      <TableHead className="font-bold text-foreground text-center">Mid-1</TableHead>
-                      <TableHead className="font-bold text-foreground text-center">Mid-2</TableHead>
-                      <TableHead className="font-bold text-secondary text-center">Best</TableHead>
-                      <TableHead className="font-bold text-foreground text-center">Assgn</TableHead>
-                      <TableHead className="font-bold text-foreground text-center">Int Total</TableHead>
-                      <TableHead className="font-bold text-foreground text-center">End Sem</TableHead>
-                      <TableHead className="font-bold text-foreground text-center">Total</TableHead>
-                      <TableHead className="font-bold text-foreground text-center">Grade</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {dbMarks.map((m, i) => {
-                      const bestMid = Math.max(m.mid1 || 0, m.mid2 || 0);
-                      return (
-                        <motion.tr 
-                          key={i} 
-                          initial={{ opacity: 0, y: 15 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: i * 0.15 }}
-                          className="border-border/40 hover:bg-black/5 transition-colors duration-150"
-                        >
-                          <TableCell className="font-bold text-foreground truncate max-w-[150px]">{m.subject}</TableCell>
-                          <TableCell className={`text-center font-medium ${m.mid1 === bestMid ? 'text-secondary font-bold' : 'text-foreground'}`}>{m.mid1}</TableCell>
-                          <TableCell className={`text-center font-medium ${m.mid2 === bestMid ? 'text-secondary font-bold' : 'text-foreground'}`}>{m.mid2}</TableCell>
-                          <TableCell className="text-center font-bold text-secondary shadow-sm bg-secondary/5 rounded-md">{bestMid}</TableCell>
-                          <TableCell className="text-center font-medium text-foreground">{m.assign}</TableCell>
-                          <TableCell className="text-center font-bold text-foreground">{(m.mid1 + m.mid2) / 2 + (m.assign || 0)}</TableCell>
-                          <TableCell className="text-center font-medium text-foreground">{m.external}</TableCell>
-                          <TableCell className="text-center font-extrabold text-foreground">{m.total}</TableCell>
-                          <TableCell className={`text-center font-bold ${m.status === 'Pass' ? 'text-green-600' : 'text-red-500'}`}>{m.grade}</TableCell>
-                        </motion.tr>
-                      );
-                    })}
-                    <motion.tr 
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.6 }}
-                      className="bg-primary text-primary-foreground hover:bg-primary/95"
-                    >
-                      <TableCell colSpan={6} className="font-bold text-right text-white">Summary:</TableCell>
-                      <TableCell colSpan={3} className="font-bold text-left text-secondary drop-shadow-sm">Current Semester Stats Available</TableCell>
-                    </motion.tr>
-                  </TableBody>
-                </Table>
-              ) : (
-                <EmptyState 
-                  icon={Trophy}
-                  title={`No Results for ${activeSem}`}
-                  description="Your academic records for this semester haven't been released yet. Check back after your examinations!"
-                />
-              )}
+            <CardContent className="p-0 overflow-x-auto min-h-[300px]">
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-border/40 bg-white/50">
+                    <TableHead className="font-bold text-foreground whitespace-nowrap">Subject</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">Mid-1</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">Mid-2</TableHead>
+                    <TableHead className="font-bold text-secondary text-center">Best</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">Assgn</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">Int Total</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">End Sem</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">Total</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">Grade</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {finalMarks.map((m, i) => {
+                    const bestMid = Math.max(m.mid1 || 0, m.mid2 || 0);
+                    return (
+                      <motion.tr 
+                        key={i} 
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.15 }}
+                        className="border-border/40 hover:bg-black/5 transition-colors duration-150"
+                      >
+                        <TableCell className="font-bold text-foreground truncate max-w-[150px]">{m.subject}</TableCell>
+                        <TableCell className={`text-center font-medium ${m.mid1 === bestMid ? 'text-secondary font-bold' : 'text-foreground'}`}>{m.mid1}</TableCell>
+                        <TableCell className={`text-center font-medium ${m.mid2 === bestMid ? 'text-secondary font-bold' : 'text-foreground'}`}>{m.mid2}</TableCell>
+                        <TableCell className="text-center font-bold text-secondary shadow-sm bg-secondary/5 rounded-md">{bestMid}</TableCell>
+                        <TableCell className="text-center font-medium text-foreground">{m.assign}</TableCell>
+                        <TableCell className="text-center font-bold text-foreground">{(m.mid1 + m.mid2) / 2 + (m.assign || 0)}</TableCell>
+                        <TableCell className="text-center font-medium text-foreground">{m.external}</TableCell>
+                        <TableCell className="text-center font-extrabold text-foreground">{m.total}</TableCell>
+                        <TableCell className={`text-center font-bold ${m.status === 'Pass' ? 'text-green-600' : 'text-red-500'}`}>{m.grade}</TableCell>
+                      </motion.tr>
+                    );
+                  })}
+                  <motion.tr 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.6 }}
+                    className="bg-primary text-primary-foreground hover:bg-primary/95"
+                  >
+                    <TableCell colSpan={6} className="font-bold text-right text-white">Summary:</TableCell>
+                    <TableCell colSpan={3} className="font-bold text-left text-secondary drop-shadow-sm">Current Semester Stats Available</TableCell>
+                  </motion.tr>
+                </TableBody>
+              </Table>
             </CardContent>
           </Card>
         </motion.div>

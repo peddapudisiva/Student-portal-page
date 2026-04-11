@@ -65,9 +65,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       if (!error && data) {
         setProfile(data);
+      } else {
+        // Force demo profile as fallback for any authenticated user without a record
+        setProfile(demoProfile);
       }
     } catch (err) {
-      console.error('Error fetching profile:', err);
+      console.error('Error fetching profile, falling back to demo:', err);
+      setProfile(demoProfile);
     }
   };
 
