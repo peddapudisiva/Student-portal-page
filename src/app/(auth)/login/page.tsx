@@ -24,31 +24,15 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError('');
-
-    if (!isSupabaseConfigured) {
-      // Automatic login in Demo Mode
-      setTimeout(() => {
-        router.push('/dashboard');
-      }, 800);
-      return;
-    }
-
-    // URGENT DEMO BYPASS: Allow any email to enter the dashboard automatically
-    if (email) {
-      setIsLoading(true);
-      signInDemo();
-      setTimeout(() => {
-        router.push('/dashboard');
-      }, 500);
-      return;
-    }
-
-    if (!email || !password) {
-      setError('Please enter both Email and Password.');
-      setIsLoading(false);
-      return;
-    }
+    
+    console.log('[AuthDebug] Bypassing authentication for demo...');
+    
+    // Unconditional Demo Login
+    await signInDemo();
+    
+    setTimeout(() => {
+      router.push('/dashboard');
+    }, 300);
   };
 
   return (
