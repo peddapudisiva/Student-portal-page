@@ -7,7 +7,11 @@ import { useAuth } from '@/lib/auth-context';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 
-export function TopBar() {
+interface TopBarProps {
+  onMenuOpen?: () => void;
+}
+
+export function TopBar({ onMenuOpen }: TopBarProps) {
   const pathname = usePathname();
   const { profile } = useAuth();
 
@@ -25,7 +29,12 @@ export function TopBar() {
     <header className="sticky top-0 z-40 w-full h-[80px] bg-background/70 backdrop-blur-xl border-b border-border/40 px-8 flex items-center justify-between transition-all duration-200">
       <div className="flex items-center gap-4">
         {/* Mobile menu - hidden on desktop */}
-        <Button variant="ghost" size="icon" className="md:hidden">
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="md:hidden"
+          onClick={onMenuOpen}
+        >
           <Menu className="w-5 h-5 text-foreground" />
         </Button>
         <div className="flex items-center gap-3">

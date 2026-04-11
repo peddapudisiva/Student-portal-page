@@ -17,6 +17,7 @@ import {
   Trophy,
   User,
   LogOut,
+  X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -46,8 +47,21 @@ export function Sidebar() {
   const rollNumber = profile?.roll_number || "---";
 
   return (
-    <aside className="fixed left-6 top-6 bottom-6 w-[260px] bg-primary/95 backdrop-blur-3xl border border-white/10 shadow-2xl rounded-[24px] text-white overflow-y-auto flex flex-col z-50 premium-sidebar">
-      <div className="p-8 border-b border-white/10 flex flex-col items-center relative overflow-hidden">
+    <aside className={cn(
+      "fixed z-50 bg-primary/95 backdrop-blur-3xl border border-white/10 shadow-2xl text-white overflow-y-auto flex flex-col premium-sidebar transition-all duration-300",
+      mobile 
+        ? "inset-0 w-[280px] rounded-r-[24px] rounded-l-none border-l-0" 
+        : "left-6 top-6 bottom-6 w-[260px] rounded-[24px]"
+    )}>
+      {mobile && (
+        <button 
+          onClick={onClose}
+          className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-all z-20"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      )}
+      <div className="p-8 border-b border-white/10 flex flex-col items-center relative overflow-hidden shrink-0">
         <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl rounded-none"></div>
         <div className="w-16 h-16 bg-secondary text-white flex items-center justify-center rounded-[12px] shadow-[0_4px_20px_rgba(59,130,246,0.4)] font-bold text-xl mb-4 relative z-10">
           IXL
