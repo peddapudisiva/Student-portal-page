@@ -26,6 +26,7 @@ interface AuthContextType {
   isDemoMode: boolean;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
+  signInDemo: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
