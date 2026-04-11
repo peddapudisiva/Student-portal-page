@@ -34,6 +34,9 @@ export default function LoginPage() {
 
     // URGENT DEMO BYPASS: Allow any email to enter the dashboard automatically
     if (email) {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('ixl_demo_active', 'true');
+      }
       setTimeout(() => {
         router.push('/dashboard');
       }, 500);

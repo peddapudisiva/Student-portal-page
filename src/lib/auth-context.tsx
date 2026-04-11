@@ -79,6 +79,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     const checkUser = async () => {
+      // Check for forced demo mode first (e.g. from the bypass login)
+      if (typeof window !== 'undefined' && localStorage.getItem('ixl_demo_active') === 'true') {
+        setUser({ id: 'demo-user-123', email: 'demo@ixl.edu' } as any);
+        setProfile(demoProfile);
+        setIsDemoMode(true);
+        setLoading(false);
+        return;
+      }
+
       try {
         const { data: { session } } = await supabase.auth.getSession();
         const currentUser = session?.user ?? null;
@@ -96,6 +105,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     checkUser();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event: any, session: any) => {
+      // Clear demo mode if a real event happens
+      if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
+        if (typeof window !== 'undefined') localStorage.removeItem('ixl_demo_active');
+      }
+
       const currentUser = session?.user ?? null;
       setUser(currentUser);
       if (currentUser) {
@@ -114,11 +128,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signOut = async () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('ixl_demo_active');
+    }
     if (isSupabaseConfigured) {
       await supabase.auth.signOut();
     }
     setProfile(null);
     setUser(null);
+    setIsDemoMode(!isSupabaseConfigured);
   };
 
   return (
